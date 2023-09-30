@@ -1,0 +1,27 @@
+USE ERX_PROJECT
+GO
+
+IF OBJECT_ID('Users') IS NULL
+	BEGIN
+		CREATE TABLE Users (
+		Id UNIQUEIDENTIFIER NOT NULL,
+		Code INT NOT NULL,
+		Name VARCHAR(255) NOT NULL,
+		AccessKey VARCHAR(150) NOT NULL,
+		Password VARCHAR(150) NOT NULL,
+		Email VARCHAR(255),
+		Phone VARCHAR(20),
+		TypeCode INT NOT NULL,
+		TypeName VARCHAR(255),
+		ProfileCode INT NOT NULL,
+		ProfileName VARCHAR(255),
+		StatusCode INT NOT NULL,
+		StatusName VARCHAR(255),
+		LastAccess DATETIME,
+		AccessCount INT NOT NULL,
+		Enabled BIT NOT NULL,
+		Avatar VARCHAR(8000),
+		Note VARCHAR(8000)
+		)
+	END
+GO
