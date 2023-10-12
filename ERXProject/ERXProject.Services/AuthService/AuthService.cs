@@ -18,7 +18,7 @@ namespace ERXProject.Services.AuthService
             this._cryptographyService = cryptographyService;
         }
 
-        public async Task<UserResult> LoginAsync(LoginParams loginParams)
+        public async Task<LoginResult> LoginAsync(LoginParams loginParams)
         {
             try
             {
@@ -28,15 +28,11 @@ namespace ERXProject.Services.AuthService
 
                 var passwordValid = this._cryptographyService.ValidatePassword(loginParams.Password, user.Password);
 
-                if (passwordValid)
-                {
-                    return new UserResult(user);
-                }
-                else
-                {
-                    return null;
-                }
+                if (!passwordValid) return null;
 
+                user.Token = this._tokenService.GenerateToken(user);
+
+                return new LoginResult(user);
             }
             catch (Exception e)
             {

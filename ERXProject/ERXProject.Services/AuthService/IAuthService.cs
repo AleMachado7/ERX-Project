@@ -4,6 +4,6 @@ namespace ERXProject.Services.AuthService
 {
     public interface IAuthService
     {
-        public Task<UserResult> LoginAsync(LoginParams loginParams);
+        public Task<LoginResult> LoginAsync(LoginParams loginParams);
     }
 }
