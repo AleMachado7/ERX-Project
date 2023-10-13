@@ -19,38 +19,18 @@ namespace ERXProject.Services.TokenService
         public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings").GetSection("JwtKey").Value);
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings").GetSection("JwtKey").Value);
 
             var descriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                        new Claim("Id", user.Id.ToString()),
-                }),
+                Subject = new ClaimsIdentity(new Claim[] { new Claim("UserId", user.Id.ToString()) }),
                 Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(descriptor);
 
             return tokenHandler.WriteToken(token);
-        }
-
-        public bool IsValid(string token)
-        {
-            JwtSecurityToken jwtSecurityToken;
-            try
-            {
-                jwtSecurityToken = new JwtSecurityToken(token);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return jwtSecurityToken.ValidTo > DateTime.UtcNow;
         }
     }
 }
