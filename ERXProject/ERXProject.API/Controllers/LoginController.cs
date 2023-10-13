@@ -19,7 +19,11 @@ namespace ERXProject.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginParams loginParams)
         {
-            return Ok(await _authService.LoginAsync(loginParams));
+            var result = await _authService.LoginAsync(loginParams);
+
+            if (result == null) { return BadRequest(); }
+
+            return Ok(result);
         }
     }
 }

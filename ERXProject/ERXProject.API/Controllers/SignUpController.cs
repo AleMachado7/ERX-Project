@@ -21,7 +21,7 @@ namespace ERXProject.API.Controllers
         {
             var user = await _userService.CreateAsync(createParams);
 
-            if (user == null) return BadRequest();
+            if (user == null) { return BadRequest(); }
 
             return Ok(user);
         }

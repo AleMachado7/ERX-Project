@@ -1,6 +1,8 @@
 ﻿using ERXProject.Core.Users;
 using ERXProject.Repositories.Users;
 using ERXProject.Services.Cryptographies;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace ERXProject.Services.Users
 {
@@ -8,6 +10,7 @@ namespace ERXProject.Services.Users
     {
         private readonly IUserRepository _userRepository;
         private readonly ICryptographyService _cryptographyService;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public UserService(IUserRepository userRepository, ICryptographyService cryptographyService)
         {
@@ -39,6 +42,28 @@ namespace ERXProject.Services.Users
             {
                 return null;
             }
+        }
+
+        public async Task<UserResult> GetContextUser(IHttpContextAccessor context)
+        {
+            foreach (Claim claims in context.HttpContext.User.Claims)
+            {
+                if (claims.Type == "UserId")
+                {
+                    try
+                    {
+                        var userId = Guid.Parse(claims.Value);
+                        var user = await this._userRepository.GetAsync(userId);
+
+                        return new UserResult(user);
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

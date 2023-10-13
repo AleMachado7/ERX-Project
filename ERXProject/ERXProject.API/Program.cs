@@ -10,6 +10,7 @@ using ERXProject.Services.Products;
 using ERXProject.Services.TokenService;
 using ERXProject.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenERX.Repositories.Shared.Sql;
@@ -74,7 +75,7 @@ namespace ERXProject.API
                 };
             });
 
-
+            builder.Services.AddHttpContextAccessor();
 
             // Dependence Injection
             builder.Services.AddTransient<SqlConnectionProvider>(connection => new SqlConnectionProvider("server=localhost;database=ERX_PROJECT;user=xpto;password=1q2w3e4r"));
